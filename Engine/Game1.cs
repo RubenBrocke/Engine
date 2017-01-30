@@ -64,7 +64,6 @@ namespace Engine
             spriteBatch.Begin();
 
             spriteBatch.Draw(Player.sprite.texture, new Vector2(Player.x, Player.y), origin: new Vector2(Player.sprite.origin_x, Player.sprite.origin_y));
-
             floor.Draw();
             hill.Draw();
 

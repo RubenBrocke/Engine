@@ -4,7 +4,7 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/Ruben/documents/visual studio 2015/Projects/Engine/Engine/Content/Panda.png</File>
-    <File>C:/Users/Ruben/documents/visual studio 2015/Projects/Engine/Engine/Content/Ground.png</File>
+    <File>C:/Users/Ruben/Documents/Visual Studio 2015/Projects/Engine/Engine/Content/Panda.png</File>
+    <File>C:/Users/Ruben/Documents/Visual Studio 2015/Projects/Engine/Engine/Content/Ground.png</File>
   </SourceFiles>
 </SourceFileCollection>

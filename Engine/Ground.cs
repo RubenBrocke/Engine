@@ -18,6 +18,7 @@ namespace Engine
         { 
             Rect = new Rectangle(X, Y, Width, Height);
             sprite = Ground_sprite;
+            
         }
 
         public void Draw()

@@ -21,18 +21,25 @@ namespace Engine
         public static double y_speed = 0.1f;
 
         //-----Ints-----//
-        public static float x;
-        public static float y;
+        public static float x = 200;
+        public static float y = 200;
         public static int x_speed_max = 5;
         public static int y_speed_max = 10;
+
+        //----Hitbox----//
+        public static Rectangle hitbox = new Rectangle((int)x - sprite.origin_x, (int)y - sprite.origin_y, sprite.width, sprite.height);
 
         public static void Update()
         {
             //Debug
             Console.WriteLine(y_speed);
 
+            //Update Hitbox
+            hitbox.X = (int)x - sprite.origin_x;
+            hitbox.Y = (int)y - sprite.origin_y;
+
             //Add gravity
-            if (!colliding(x, y + sprite.height / 2 + 1))
+            if (!colliding(Game1.floor.Rect, 0, -1) && !colliding(Game1.hill.Rect, 0, -1))
             {
                 y_speed += gravity;
                 Console.WriteLine("Acc");
@@ -55,7 +62,7 @@ namespace Engine
             {
                 x_speed = -4;
             }
-            else if (colliding(x, y + sprite.height / 2 + 1))
+            else if (colliding(Game1.floor.Rect, 0, -1) || colliding(Game1.hill.Rect, 0, -1))
             {
                 x_speed = 0;
             }
@@ -65,35 +72,26 @@ namespace Engine
             }
 
             //Do collision (to be moved to parent class)
-            if (colliding(x, y + sprite.height / 2 + y_speed))
-            {
-                while (!colliding(x, y + sprite.height / 2 + Math.Sign(y_speed)))
-                {
-                    y += Math.Sign(y_speed);
-                }
+            if (colliding(Game1.floor.Rect)){
+                y = Game1.floor.Rect.Top - hitbox.Height / 2;
                 y_speed = 0;
-                Console.WriteLine("Colliding");
+            }
+            else if (colliding(Game1.hill.Rect) && y < Game1.hill.Rect.Y)
+            {
+                y = Game1.hill.Rect.Top - hitbox.Height / 2;
+                y_speed = 0;
             }
 
-            if (colliding(x + Math.Sign(x_speed) * (sprite.width / 2) + x_speed, y + sprite.height / 2))
-            {
-                while (!colliding(x + Math.Sign(x_speed) * (sprite.width / 2) + Math.Sign(x_speed), y + sprite.height / 2))
-                {
-                    x += Math.Sign(x_speed);
-                }
-                x_speed = 0;
-                Console.WriteLine("Colliding");
-            }
+
 
             //Add speed to position
             y += (float)y_speed;
             x += (float)x_speed;
         }
 
-        public static bool colliding(double X, double Y)
+        public static bool colliding(Rectangle Rect)
         {
-
-            if (Game1.floor.Rect.Contains((float)X, (float)Y) || Game1.hill.Rect.Contains((float)X, (float)Y))
+            if (Rect.Intersects(hitbox) || Rect.Intersects(hitbox))
             {
                 return true;
             }
@@ -102,9 +100,24 @@ namespace Engine
                 return false;
             }
         }
+
+        public static bool colliding(Rectangle Rect, int offsetx, int offsety)
+        {
+            Rectangle testRect = new Rectangle(Rect.X + offsetx, Rect.Y + offsety, Rect.Width, Rect.Height);
+
+            if (testRect.Intersects(hitbox) || testRect.Intersects(hitbox))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static void jump()
         {
-            if (colliding(x, y + sprite.height / 2 + 1))
+            if (colliding(Game1.floor.Rect, 0, -1) || colliding(Game1.hill.Rect, 0, -1))
             {
                 y_speed = -15;
             }
