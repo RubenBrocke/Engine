@@ -39,7 +39,7 @@ namespace Engine
             hitbox.Y = (int)y - sprite.origin_y;
 
             //Add gravity
-            if (!colliding(Game1.floor.Rect, 0, -1) && !colliding(Game1.hill.Rect, 0, -1))
+            if (!colliding(Game1.floor.Rect, 0, 1) && !colliding(Game1.hill.Rect, 0, 1))
             {
                 y_speed += gravity;
                 Console.WriteLine("Acc");
@@ -62,7 +62,7 @@ namespace Engine
             {
                 x_speed = -4;
             }
-            else if (colliding(Game1.floor.Rect, 0, -1) || colliding(Game1.hill.Rect, 0, -1))
+            else if (colliding(Game1.floor.Rect, 0, 1) || colliding(Game1.hill.Rect, 0, 1))
             {
                 x_speed = 0;
             }
@@ -80,6 +80,19 @@ namespace Engine
             {
                 y = Game1.hill.Rect.Top - hitbox.Height / 2;
                 y_speed = 0;
+                x_speed = 0;
+            }
+            else if ((colliding(Game1.hill.Rect, (int)x_speed, 0) && y > Game1.hill.Rect.Y))
+            {
+                if (x > Game1.hill.Rect.Center.X)
+                {
+                    x = Game1.hill.Rect.Right + hitbox.Width / 2;
+                }
+                else if (x < Game1.hill.Rect.Center.X)
+                {
+                    x = Game1.hill.Rect.Left - hitbox.Width / 2;
+                }
+                x_speed = 0;
             }
 
 
@@ -103,7 +116,7 @@ namespace Engine
 
         public static bool colliding(Rectangle Rect, int offsetx, int offsety)
         {
-            Rectangle testRect = new Rectangle(Rect.X + offsetx, Rect.Y + offsety, Rect.Width, Rect.Height);
+            Rectangle testRect = new Rectangle(Rect.X + -offsetx, Rect.Y + -offsety, Rect.Width, Rect.Height);
 
             if (testRect.Intersects(hitbox) || testRect.Intersects(hitbox))
             {
@@ -117,7 +130,7 @@ namespace Engine
 
         public static void jump()
         {
-            if (colliding(Game1.floor.Rect, 0, -1) || colliding(Game1.hill.Rect, 0, -1))
+            if (colliding(Game1.floor.Rect, 0, 1) || colliding(Game1.hill.Rect, 0, 1))
             {
                 y_speed = -15;
             }
