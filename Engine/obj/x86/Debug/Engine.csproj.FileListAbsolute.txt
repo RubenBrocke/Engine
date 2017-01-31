@@ -25,3 +25,4 @@ c:\users\ruben\documents\visual studio 2015\Projects\Engine\Engine\obj\x86\Debug
 c:\users\ruben\documents\visual studio 2015\Projects\Engine\Engine\obj\x86\Debug\Engine.pdb
 c:\users\ruben\documents\visual studio 2015\Projects\Engine\Engine\bin\Windows\x86\Debug\Content\Panda.xnb
 C:\Users\Ruben\documents\visual studio 2015\Projects\Engine\Engine\bin\Windows\x86\Debug\Content\Ground.xnb
+C:\Users\Ruben\documents\visual studio 2015\Projects\Engine\Engine\bin\Windows\x86\Debug\Content\Goomba.xnb

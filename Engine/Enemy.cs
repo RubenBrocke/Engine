@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Engine;
-
 
 namespace Engine
 {
-    public static class Player
+    public class Enemy
     {
-        public static Sprite sprite = new Sprite(32, 32, 1, 16, 16, "Panda");
-        
+        Sprite sprite;
+
         //-----Float-----//
         static float gravity = 1.03f;
         public static double x_speed = 0f;
         public static double y_speed = 0.1f;
+        public static int direction = 1;
 
         //-----Ints-----//
         public static float x = 200;
@@ -27,17 +26,19 @@ namespace Engine
         public static int y_speed_max = 10;
 
         //----Hitbox----//
-        public static Rectangle hitbox = new Rectangle((int)x - sprite.origin_x, (int)y - sprite.origin_y, sprite.width, sprite.height);
+        public static Rectangle hitbox;
         public static Rectangle outRect;
 
-        //---Current Level---//
-        static Level currentLevel = Game1.level1;
-
-        public static void Update()
+        public Enemy(int xpos, int ypos, Sprite spriteEnemy)
         {
-            //Debug
-            Console.WriteLine(y_speed);
+            x = xpos;
+            y = ypos;
+            sprite = spriteEnemy;
+            hitbox = new Rectangle((int)x - sprite.origin_x, (int)y - sprite.origin_y, sprite.width, sprite.height);
+        }
 
+        public void Update()
+        {
             //Update Hitbox
             hitbox.X = (int)x - sprite.origin_x;
             hitbox.Y = (int)y - sprite.origin_y;
@@ -55,28 +56,11 @@ namespace Engine
                 y_speed = y_speed_max;
             }
 
-            //Add movement
-            KeyboardState state = Keyboard.GetState();
+            //Move
+            x_speed = 3 * direction;
 
-            if (state.IsKeyDown(Keys.D))
+            if (Global.colliding(0, (int)y_speed, hitbox, out outRect))
             {
-                x_speed = 4;
-            }
-            else if (state.IsKeyDown(Keys.A))
-            {
-                x_speed = -4;
-            }
-            else if (Global.colliding(0, 1, hitbox, out outRect))
-            {
-                x_speed = 0;
-            }
-            if (state.IsKeyDown(Keys.Space))
-            {
-                jump();
-            }
-
-            //Do collision (to be moved to parent class)
-            if (Global.colliding(0, (int)y_speed, hitbox, out outRect)) {
                 y = outRect.Top - hitbox.Height / 2;
                 y_speed = 0;
             }
@@ -85,10 +69,12 @@ namespace Engine
                 if (x > outRect.Right)
                 {
                     x = outRect.Right + hitbox.Width / 2;
+                    direction = 1;
                 }
                 else if (x < outRect.Left)
                 {
                     x = outRect.Left - hitbox.Width / 2;
+                    direction = -1;
                 }
                 x_speed = 0;
             }
@@ -98,12 +84,9 @@ namespace Engine
             x += (float)x_speed;
         }
 
-        public static void jump()
+        public void Draw()
         {
-            if (Global.colliding(0, 1, hitbox, out outRect))
-            {
-                y_speed = -15;
-            }
+            Game1.spriteBatch.Draw(sprite.texture, position: new Vector2(x, y), origin: new Vector2(sprite.origin_x, sprite.origin_y));
         }
     }
 }

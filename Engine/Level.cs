@@ -10,9 +10,9 @@ namespace Engine
     {
         public Ground[] grounds;
 
-        public Level(params Ground[] grounds)
+        public Level(params Ground[] groundsArray)
         {
-            this.grounds = grounds;
+            this.grounds = groundsArray;
         }
 
         public void Draw()
@@ -22,5 +22,11 @@ namespace Engine
                 ground.Draw();
             }
         }
+
+        public void Add(Ground ground)
+        {
+            grounds[grounds.Length] = ground;
+        }
+
     }
 }

@@ -16,9 +16,12 @@ namespace Engine
 
         //-----Sprites-----//
         public static Sprite ground = new Sprite(32, 32, 1, 0, 0, "Ground");
+        public static Sprite goomba = new Sprite(32, 32, 1, 16, 16, "Goomba");
         public static Ground floor = new Ground(0, 480 - ground.height, 800, ground.height, ground);
         public static Ground hill = new Ground(300, 480 - 96, 256, 98, ground);
-        public static Level level1 = new Level(floor, hill);
+        public static Ground wall = new Ground(800 - 32, 0, 32, 480, ground);
+        public static Level level1 = new Level(floor, hill, wall);
+        public static Enemy Goomba = new Enemy(400, 200, goomba);
 
         public Game1()
         {
@@ -40,6 +43,7 @@ namespace Engine
             // TODO: use this.Content to load your game content here
             Player.sprite.texture = Content.Load<Texture2D>("Panda");
             ground.texture = Content.Load<Texture2D>("Ground");
+            goomba.texture = Content.Load<Texture2D>("Goomba");
         }
 
         protected override void UnloadContent()
@@ -54,6 +58,7 @@ namespace Engine
 
             // TODO: Add your update logic here
             Player.Update();
+            Goomba.Update();
             base.Update(gameTime);
         }
 
@@ -66,10 +71,9 @@ namespace Engine
 
             spriteBatch.Draw(Player.sprite.texture, new Vector2(Player.x, Player.y), origin: new Vector2(Player.sprite.origin_x, Player.sprite.origin_y));
             level1.Draw();
+            Goomba.Draw();
 
             spriteBatch.End();
-
-
 
             base.Draw(gameTime);
         }
