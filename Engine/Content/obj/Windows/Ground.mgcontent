@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/Ruben/Documents/Visual Studio 2015/Projects/Engine/Engine/Content/Ground.png</SourceFile>
+  <SourceFile>C:/Users/Ruben/documents/visual studio 2015/Projects/Engine/Engine/Content/Ground.png</SourceFile>
   <SourceTime>2017-01-27T14:07:56.375083+01:00</SourceTime>
-  <DestFile>C:/Users/Ruben/Documents/Visual Studio 2015/Projects/Engine/Engine/Content/bin/Windows/Ground.xnb</DestFile>
-  <DestTime>2017-01-30T15:19:13.7958203+01:00</DestTime>
+  <DestFile>C:/Users/Ruben/documents/visual studio 2015/Projects/Engine/Engine/Content/bin/Windows/Ground.xnb</DestFile>
+  <DestTime>2017-01-31T14:33:15.2184973+01:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2016-03-30T08:36:08+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

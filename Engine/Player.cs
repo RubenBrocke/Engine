@@ -14,7 +14,7 @@ namespace Engine
     public static class Player
     {
         public static Sprite sprite = new Sprite(32, 32, 1, 16, 16, "Panda");
-
+        
         //-----Float-----//
         static float gravity = 1.03f;
         public static double x_speed = 0f;
@@ -28,6 +28,10 @@ namespace Engine
 
         //----Hitbox----//
         public static Rectangle hitbox = new Rectangle((int)x - sprite.origin_x, (int)y - sprite.origin_y, sprite.width, sprite.height);
+        public static Rectangle outRect;
+
+        //---Current Level---//
+        static Level currentLevel = Game1.level1;
 
         public static void Update()
         {
@@ -39,7 +43,7 @@ namespace Engine
             hitbox.Y = (int)y - sprite.origin_y;
 
             //Add gravity
-            if (!colliding(Game1.floor.Rect, 0, 1) && !colliding(Game1.hill.Rect, 0, 1))
+            if (!colliding(0, 1, out outRect))
             {
                 y_speed += gravity;
                 Console.WriteLine("Acc");
@@ -62,7 +66,7 @@ namespace Engine
             {
                 x_speed = -4;
             }
-            else if (colliding(Game1.floor.Rect, 0, 1) || colliding(Game1.hill.Rect, 0, 1))
+            else if (colliding(0, 1, out outRect))
             {
                 x_speed = 0;
             }
@@ -72,27 +76,21 @@ namespace Engine
             }
 
             //Do collision (to be moved to parent class)
-            if (colliding(Game1.floor.Rect)){
-                y = Game1.floor.Rect.Top - hitbox.Height / 2;
-                y_speed = 0;
-            }
-            else if (colliding(Game1.hill.Rect) && y < Game1.hill.Rect.Y)
+            if (colliding((int)x_speed, 0, out outRect))
             {
-                y = Game1.hill.Rect.Top - hitbox.Height / 2;
-                y_speed = 0;
-                x_speed = 0;
-            }
-            else if ((colliding(Game1.hill.Rect, (int)x_speed, 0) && y > Game1.hill.Rect.Y))
-            {
-                if (x > Game1.hill.Rect.Center.X)
+                if (x > outRect.Right)
                 {
-                    x = Game1.hill.Rect.Right + hitbox.Width / 2;
+                    x = outRect.Right + hitbox.Width / 2;
                 }
-                else if (x < Game1.hill.Rect.Center.X)
+                else if (x < outRect.Left)
                 {
-                    x = Game1.hill.Rect.Left - hitbox.Width / 2;
+                    x = outRect.Left - hitbox.Width / 2;
                 }
                 x_speed = 0;
+            }
+            if (colliding(0, (int)y_speed, out outRect)) {
+                y = outRect.Top - hitbox.Height / 2;
+                y_speed = 0;
             }
 
 
@@ -102,35 +100,51 @@ namespace Engine
             x += (float)x_speed;
         }
 
-        public static bool colliding(Rectangle Rect)
+        public static bool colliding()
         {
-            if (Rect.Intersects(hitbox) || Rect.Intersects(hitbox))
+            bool succes = true;
+
+            foreach (var ground in currentLevel.grounds)
             {
-                return true;
+                if (ground.Rect.Intersects(hitbox))
+                {
+                    succes =  true;
+                }
+                else
+                {
+                    succes =  false;
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return succes;
         }
 
-        public static bool colliding(Rectangle Rect, int offsetx, int offsety)
+        public static bool colliding(int offsetx, int offsety, out Rectangle Rect)
         {
-            Rectangle testRect = new Rectangle(Rect.X + -offsetx, Rect.Y + -offsety, Rect.Width, Rect.Height);
+            bool succes = true;
+            Rect = Rectangle.Empty;
+            foreach (var ground in currentLevel.grounds)
+            {
+                Rectangle testRect = new Rectangle(ground.Rect.X + -offsetx, ground.Rect.Y + -offsety, ground.Rect.Width, ground.Rect.Height);
 
-            if (testRect.Intersects(hitbox) || testRect.Intersects(hitbox))
-            {
-                return true;
+                if (testRect.Intersects(hitbox))
+                {
+                    succes = true;
+                    Rect = ground.Rect;
+                    break;
+                }
+                else
+                {
+                    succes = false;
+                }
             }
-            else
-            {
-                return false;
-            }
+
+            return succes;
         }
 
         public static void jump()
         {
-            if (colliding(Game1.floor.Rect, 0, 1) || colliding(Game1.hill.Rect, 0, 1))
+            if (colliding(0, 1, out outRect))
             {
                 y_speed = -15;
             }

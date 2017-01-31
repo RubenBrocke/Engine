@@ -18,6 +18,7 @@ namespace Engine
         public static Sprite ground = new Sprite(32, 32, 1, 0, 0, "Ground");
         public static Ground floor = new Ground(0, 480 - ground.height, 800, ground.height, ground);
         public static Ground hill = new Ground(300, 480 - 96, 256, 98, ground);
+        public static Level level1 = new Level(floor, hill);
 
         public Game1()
         {
@@ -64,8 +65,7 @@ namespace Engine
             spriteBatch.Begin();
 
             spriteBatch.Draw(Player.sprite.texture, new Vector2(Player.x, Player.y), origin: new Vector2(Player.sprite.origin_x, Player.sprite.origin_y));
-            floor.Draw();
-            hill.Draw();
+            level1.Draw();
 
             spriteBatch.End();
 
