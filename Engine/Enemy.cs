@@ -17,13 +17,18 @@ namespace Engine
         static float gravity = 1.03f;
         public static double x_speed = 0f;
         public static double y_speed = 0.1f;
-        public static int direction = 1;
-
-        //-----Ints-----//
         public static float x = 200;
         public static float y = 200;
+
+        //-----Ints-----//
         public static int x_speed_max = 5;
         public static int y_speed_max = 10;
+        public static int direction = 1;
+        public static int deathTimer = 0;
+
+        //----Boolean---//
+        public static bool isAlive = true;
+        public static bool damageGiven = false;
 
         //----Hitbox----//
         public static Rectangle hitbox;
@@ -79,14 +84,58 @@ namespace Engine
                 x_speed = 0;
             }
 
+            //Check for collision with player
+            if (hitbox.Intersects(Player.hitbox))
+            {
+                if (hitbox.Center.Y > Player.hitbox.Bottom && Player.y_speed > 0)
+                {
+                    isAlive = false;
+                }
+                else if (hitbox.Center.Y < Player.hitbox.Bottom)
+                {
+                    if (!damageGiven)
+                    {
+                        Player.takeDamage(1);
+                        damageGiven = true;
+                    }
+                }
+            }
+            else
+            {
+                damageGiven = false;
+            }
+
+
             //Add speed to position
             y += (float)y_speed;
             x += (float)x_speed;
+
+            //update timer and check for respawn
+            if (!isAlive){
+                deathTimer++;
+            }
+            if (deathTimer == 600)
+            {
+                Respawn();
+            }
+
+        }
+
+        public void Respawn()
+        {
+            isAlive = true;
+            x = 400;
+            y = 200;
+            direction = 1;
+            deathTimer = 0;
         }
 
         public void Draw()
         {
-            Game1.spriteBatch.Draw(sprite.texture, position: new Vector2(x, y), origin: new Vector2(sprite.origin_x, sprite.origin_y));
+            if (isAlive)
+            {
+                Game1.spriteBatch.Draw(sprite.texture, position: new Vector2(x, y), origin: new Vector2(sprite.origin_x, sprite.origin_y));
+            }
         }
     }
 }

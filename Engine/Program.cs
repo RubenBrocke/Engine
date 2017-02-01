@@ -1,4 +1,7 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Engine
 {
@@ -11,6 +14,7 @@ namespace Engine
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+
         [STAThread]
         static void Main()
         {

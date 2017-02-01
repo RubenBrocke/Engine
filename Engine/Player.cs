@@ -16,7 +16,7 @@ namespace Engine
         public static Sprite sprite = new Sprite(32, 32, 1, 16, 16, "Panda");
         
         //-----Float-----//
-        static float gravity = 1.03f;
+        static float gravity = 0.8f;
         public static double x_speed = 0f;
         public static double y_speed = 0.1f;
 
@@ -25,6 +25,7 @@ namespace Engine
         public static float y = 200;
         public static int x_speed_max = 5;
         public static int y_speed_max = 10;
+        public static int health = 3;
 
         //----Hitbox----//
         public static Rectangle hitbox = new Rectangle((int)x - sprite.origin_x, (int)y - sprite.origin_y, sprite.width, sprite.height);
@@ -75,6 +76,8 @@ namespace Engine
                 jump();
             }
 
+            Game1.cameraMain.lookAt((int)x, (int)y);
+
             //Do collision (to be moved to parent class)
             if (Global.colliding(0, (int)y_speed, hitbox, out outRect)) {
                 y = outRect.Top - hitbox.Height / 2;
@@ -96,6 +99,11 @@ namespace Engine
             //Add speed to position
             y += (float)y_speed;
             x += (float)x_speed;
+        }
+
+        public static void takeDamage(int damage)
+        {
+            health -= damage;
         }
 
         public static void jump()
